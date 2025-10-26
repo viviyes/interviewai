@@ -20,7 +20,11 @@ const app = express();
 app.set("trust proxy", 1);
 
 // Security & performance middlewares
-app.use(helmet());         // Adds common security headers
+app.use(helmet(
+  {
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // 或者直接 false
+  }
+));         // Adds common security headers
 app.use(compression());    // Compresses responses (gzip)
 
 // Parse JSON requests
