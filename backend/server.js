@@ -38,6 +38,9 @@ const allowList =
     .map(s => s.trim())
     .filter(Boolean);
 
+    console.log('[CORS] CORS_ORIGINS=', process.env.CORS_ORIGINS || process.env.CORS_ORIGIN);
+    console.log('[CORS] allowList=', allowList);
+
 // Allow only listed domains to access API
 app.use(
   cors({

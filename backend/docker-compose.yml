@@ -2,23 +2,11 @@
 version: "3.9"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  backend:
+    image: ghcr.io/viviyes/interviewai-backend:latest
+    container_name: interviewai-backend
+    ports:
+      - "8000:8000"
     env_file:
       - .env
-    restart: unless-stopped
-
-  nginx:
-    image: nginx:1.27-alpine
-    depends_on:
-      - app
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro      # 用 Cloudflare Origin 时需要
-      # 若用 Let's Encrypt，再挂载 /etc/letsencrypt（见方案 B）
     restart: unless-stopped
