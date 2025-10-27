@@ -65,6 +65,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
+          command_timeout: 30m
+          timeout: 60s
           script: |
             # if VM is not logged in to GHCR, login (recommended to login manually on VM and save)
             if ! docker pull ghcr.io/${{ github.repository }}-backend:latest >/dev/null 2>&1; then
@@ -76,9 +78,24 @@ jobs:
             docker compose pull
             docker compose up -d
 
-            # health check (optional)
-            sleep 2
-            docker ps
+            # Enhanced health check
+            echo "Waiting for container to start..."
+            sleep 5
+            
+            # Check container status
+            docker ps -a | grep interviewai-backend
+            
+            # Check logs for errors
+            echo "=== Container Logs ==="
+            docker logs --tail 50 interviewai-backend
+            
+            # Test health endpoint
+            echo "=== Testing Health Endpoint ==="
+            docker exec interviewai-backend curl -f http://localhost:8000/healthz || echo "Health check failed!"
+            
+            # Check if port is listening
+            echo "=== Port Status ==="
+            docker exec interviewai-backend netstat -tuln | grep 8000 || echo "Port 8000 not listening!"
 
             # verify and reload Nginx
             sudo nginx -t && sudo systemctl reload nginx
