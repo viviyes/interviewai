@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import HERO_IMG from "../assets/hero-img.png";
-import HERO_IMG_MY from "../assets/hero-img-my2.jpg";
+import HERO_IMG_MY from "../assets/hero-img-my3.jpg";
 import { APP_FEATURES } from "../utils/data";
 import { useNavigate } from "react-router-dom";
 import { LuSparkles } from "react-icons/lu";
